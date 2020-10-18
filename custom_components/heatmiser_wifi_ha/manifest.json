@@ -1,0 +1,10 @@
+{
+    "domain": "heatmiser_wifi",
+    "name": "Heatmiser Wifi",
+    "documentation": "https://github.com/midstar/heatmiser_wifi_ha/",
+    "issue_tracker": "https://github.com/midstar/heatmiser_wifi_ha/issues",
+    "dependencies": [],
+    "after_dependencies": [],
+    "codeowners": ["midstar"],
+    "requirements": ["heatmiser_wifi"]
+  }

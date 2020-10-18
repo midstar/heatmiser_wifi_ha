@@ -1,0 +1,11 @@
+.coverage
+__pycache__
+*.out
+.vscode
+*.pyc
+.tox
+*.egg-info
+doc/build
+htmlcov
+build
+dist
