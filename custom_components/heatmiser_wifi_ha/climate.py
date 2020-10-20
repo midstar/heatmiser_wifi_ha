@@ -10,8 +10,9 @@ from homeassistant.components.climate import (
     PLATFORM_SCHEMA, ClimateEntity)
 
 from homeassistant.components.climate.const import (
-    SUPPORT_TARGET_TEMPERATURE, HVAC_MODE_OFF, HVAC_MODE_HEAT, 
-    CURRENT_HVAC_OFF, CURRENT_HVAC_HEAT, CURRENT_HVAC_IDLE)
+    SUPPORT_TARGET_TEMPERATURE, SUPPORT_PRESET_MODE, HVAC_MODE_OFF,
+    HVAC_MODE_HEAT, CURRENT_HVAC_OFF, CURRENT_HVAC_HEAT,
+    CURRENT_HVAC_IDLE, PRESET_HOME, PRESET_AWAY)
 
 from homeassistant.const import (
     CONF_HOST, CONF_PORT, CONF_PIN, TEMP_CELSIUS, TEMP_FAHRENHEIT, 
@@ -55,7 +56,7 @@ class HeatmiserWifi(ClimateEntity):
 
     @property
     def supported_features(self):
-        return SUPPORT_TARGET_TEMPERATURE
+        return SUPPORT_TARGET_TEMPERATURE | SUPPORT_PRESET_MODE
 
     @property
     def temperature_unit(self):
@@ -69,15 +70,17 @@ class HeatmiserWifi(ClimateEntity):
 
     @property
     def target_temperature(self):
+        if self._heatmiser_info['run_mode'] == 'Frost protection mode':
+            return self._heatmiser_info['frost_protect_temperature']
         return self._heatmiser_info['set_room_temp']
 
     @property
     def target_temperature_high(self):
-        return self._heatmiser_info['set_room_temp']
+        self.target_temperature()
 
     @property
     def target_temperature_low(self):
-        return self._heatmiser_info['set_room_temp'] - self._heatmiser_info['switch_differential']
+        return self.target_temperature() - self._heatmiser_info['switch_differential']
 
     @property
     def max_temp(self):
@@ -102,6 +105,16 @@ class HeatmiserWifi(ClimateEntity):
         return [HVAC_MODE_OFF, HVAC_MODE_HEAT]
 
     @property
+    def preset_mode(self):
+        if self._heatmiser_info['run_mode'] == 'Frost protection mode':
+            return PRESET_AWAY
+        return PRESET_HOME
+
+    @property
+    def preset_modes(self):
+        return [PRESET_HOME, PRESET_AWAY]
+
+    @property
     def hvac_action(self):
         if self._heatmiser_info['on_off'] == 'Off':
             return CURRENT_HVAC_OFF
@@ -120,7 +133,10 @@ class HeatmiserWifi(ClimateEntity):
         if temperature == None:
             return
         self._heatmiser.connect()
-        self._heatmiser.set_value('set_room_temp', temperature)
+        if self._heatmiser_info['run_mode'] == 'Frost protection mode':
+            self._heatmiser.set_value('frost_protect_temperature', temperature)
+        else:
+            self._heatmiser.set_value('set_room_temp', temperature)
         self._heatmiser_info = self._heatmiser.get_info() # Update
         self._heatmiser.disconnect()
 
@@ -132,6 +148,17 @@ class HeatmiserWifi(ClimateEntity):
             return # Invalid mode return
         self._heatmiser.connect()
         self._heatmiser.set_value('on_off', on_off)
+        self._heatmiser_info = self._heatmiser.get_info() # Update
+        self._heatmiser.disconnect()
+
+    def set_preset_mode(self, preset_mode):
+        run_mode = 'Heating mode (normal mode)'
+        if preset_mode == PRESET_AWAY:
+            run_mode = 'Frost protection mode'
+        elif preset_mode != PRESET_HOME:
+            return # Invalid mode return
+        self._heatmiser.connect()
+        self._heatmiser.set_value('run_mode', run_mode)
         self._heatmiser_info = self._heatmiser.get_info() # Update
         self._heatmiser.disconnect()
         
