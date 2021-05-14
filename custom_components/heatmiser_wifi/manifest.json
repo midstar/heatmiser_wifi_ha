@@ -5,7 +5,9 @@
     "issue_tracker": "https://github.com/midstar/heatmiser_wifi_ha/issues",
     "dependencies": [],
     "after_dependencies": [],
-    "codeowners": ["midstar"],
+    "codeowners": [
+      "@midstar"
+    ],
     "requirements": ["heatmiser_wifi"],
     "version": "1.0.0",
     "iot_class": "local_polling"
