@@ -1,6 +1,10 @@
-# Heatmiser WiFi Home Assistant Component
+# DEPRECATED - Heatmiser WiFi Home Assistant Component
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+This repository is no longer maintained. Feel free to clone the 
+repository and take over the responsibility.
 
 ## Overview
 A [Heatmiser](http://www.heatmiser.com/) WiFi Thermostat Home Assistant plugin.
