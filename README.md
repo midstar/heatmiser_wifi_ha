@@ -3,8 +3,11 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
 [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
-This repository is no longer maintained. Feel free to clone the 
-repository and take over the responsibility.
+This repository is no longer maintained. 
+
+Please use clone at [iainbullock/heatmiser_wifi_ha](https://github.com/iainbullock/heatmiser_wifi_ha) instead.
+
+
 
 ## Overview
 A [Heatmiser](http://www.heatmiser.com/) WiFi Thermostat Home Assistant plugin.
